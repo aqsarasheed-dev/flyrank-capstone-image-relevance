@@ -25,12 +25,15 @@ services:
     environment:
       DATABASE_URL: postgresql://postgres:postgres@db:5432/image_matching_db
       GEMINI_API_KEY: ${GEMINI_API_KEY}
-      VISION_MODEL: ${VISION_MODEL:-gemini-2.5-flash}
+      VISION_MODEL: ${VISION_MODEL:-gemini-3.6-flash}
       EMBED_MODEL: ${EMBED_MODEL:-gemini-embedding-001}
-      SIMILARITY_THRESHOLD: ${SIMILARITY_THRESHOLD:-0.62}
+      SIMILARITY_THRESHOLD: ${SIMILARITY_THRESHOLD:-0.72}
       LOW_CONFIDENCE_THRESHOLD: ${LOW_CONFIDENCE_THRESHOLD:-0.7}
+      VISION_BATCH_SIZE: ${VISION_BATCH_SIZE:-5}
+      MAX_ATTEMPTS: ${MAX_ATTEMPTS:-3}
+      MAX_REQUESTS_PER_RUN: ${MAX_REQUESTS_PER_RUN:-18}
       PORT: 3000
-   volumes:
+    volumes:
       - ./corpus:/app/corpus:ro
       - ./server.js:/app/server.js:ro
       - ./routes:/app/routes:ro

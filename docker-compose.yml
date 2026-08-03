@@ -1,0 +1,40 @@
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: image_matching_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d image_matching_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  app:
+    build: .
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@db:5432/image_matching_db
+      GEMINI_API_KEY: ${GEMINI_API_KEY}
+      VISION_MODEL: ${VISION_MODEL:-gemini-2.5-flash}
+      EMBED_MODEL: ${EMBED_MODEL:-gemini-embedding-001}
+      SIMILARITY_THRESHOLD: ${SIMILARITY_THRESHOLD:-0.62}
+      LOW_CONFIDENCE_THRESHOLD: ${LOW_CONFIDENCE_THRESHOLD:-0.7}
+      PORT: 3000
+    volumes:
+      - ./corpus:/app/corpus:ro
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  pgdata:

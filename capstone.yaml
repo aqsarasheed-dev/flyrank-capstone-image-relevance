@@ -26,8 +26,8 @@ endpoints:
     path: /posts/red-fox-behavior/images
     note: "Probe 2 — fox ranks first, wolf and dog rank lower"
   - method: GET
-    path: /posts/red-fox-behavior/evaluate/{wolf_image_id}
-    note: "Probe 3 — guard REJECTS with a category-mismatch reason"
+    path: /posts/red-fox-behavior/evaluate/41
+    note: "Probe 3 — image 41 is wolf-1.jpg; guard REJECTS at similarity 0.7742 (above threshold) on species mismatch"
   - method: GET
     path: /posts/coral-reef-bleaching/images
     note: "Probe 4 — no confident match, with reasons"

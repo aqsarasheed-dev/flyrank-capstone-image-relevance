@@ -1,0 +1,22 @@
+name: flyrank-capstone-image-relevance
+description: AI Image Understanding & Content Matching Engine
+run: docker compose up --build
+seed: docker compose exec app npm run seed
+test: docker compose exec app npm test
+base_url: http://localhost:3000
+endpoints:
+  - method: POST
+    path: /api/images/classify
+    description: Trigger batch vision classification job on the image corpus
+  - method: GET
+    path: /api/posts/:id/images
+    description: Get ranked image suggestions for a post, with mismatch guard applied
+  - method: POST
+    path: /api/pairings/:id/approve
+    description: Approve a suggested image-post pairing
+  - method: POST
+    path: /api/pairings/:id/reject
+    description: Reject a suggested image-post pairing
+  - method: GET
+    path: /api/costs
+    description: View per-call cost tracking for vision/embedding calls

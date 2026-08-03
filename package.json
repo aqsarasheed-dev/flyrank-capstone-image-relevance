@@ -1,28 +1,28 @@
 {
   "name": "flyrank-capstone-image-relevance",
   "version": "1.0.0",
-  "description": "AI Image Understanding &amp; Content Matching Engine , FlyRank Backend Capstone",
-  "main": "index.js",
+  "description": "AI Image Understanding & Content Matching Engine — FlyRank Backend Capstone",
+  "main": "server.js",
+  "type": "commonjs",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node server.js",
+    "test": "node --test tests/*.test.js",
+    "seed": "node scripts/seedImages.js && node scripts/seedPosts.js",
+    "tag": "node jobs/tagImages.js",
+    "embed": "node jobs/embed.js",
+    "eval": "node scripts/eval.js",
+    "tune": "node scripts/tuneThreshold.js"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/aqsarasheed-dev/flyrank-capstone-image-relevance.git"
   },
-  "keywords": [],
   "author": "",
-  "license": "ISC",
-  "type": "commonjs",
-  "bugs": {
-    "url": "https://github.com/aqsarasheed-dev/flyrank-capstone-image-relevance/issues"
-  },
-  "homepage": "https://github.com/aqsarasheed-dev/flyrank-capstone-image-relevance#readme",
+  "license": "MIT",
   "dependencies": {
     "@google/genai": "^2.15.0",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
-    "groq-sdk": "^1.5.0",
     "pg": "^8.22.0",
     "zod": "^4.4.3"
   }

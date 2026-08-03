@@ -1,22 +1,40 @@
-name: flyrank-capstone-image-relevance
-description: AI Image Understanding & Content Matching Engine
-run: docker compose up --build
-seed: docker compose exec app npm run seed
-test: docker compose exec app npm test
+name: AI Image Understanding & Content Matching Engine
+track: backend
+capstone: image-relevance
+
+run: docker compose up --build -d
+seed: node scripts/seedImages.js && node scripts/seedPosts.js && node jobs/tagImages.js && node jobs/embed.js
+test: npm test
 base_url: http://localhost:3000
+
+env_required:
+  - GEMINI_API_KEY
+  - DATABASE_URL
+  - VISION_MODEL
+  - EMBED_MODEL
+  - SIMILARITY_THRESHOLD
+  - LOW_CONFIDENCE_THRESHOLD
+
 endpoints:
-  - method: POST
-    path: /api/images/classify
-    description: Trigger batch vision classification job on the image corpus
   - method: GET
-    path: /api/posts/:id/images
-    description: Get ranked image suggestions for a post, with mismatch guard applied
-  - method: POST
-    path: /api/pairings/:id/approve
-    description: Approve a suggested image-post pairing
-  - method: POST
-    path: /api/pairings/:id/reject
-    description: Reject a suggested image-post pairing
+    path: /health
+    note: liveness + db connectivity
   - method: GET
-    path: /api/costs
-    description: View per-call cost tracking for vision/embedding calls
+    path: /images
+    note: all images with validated tags; ?flagged=true shows low-confidence
+  - method: GET
+    path: /posts/red-fox-behavior/images
+    note: "Probe 2 — fox ranks first, wolf and dog rank lower"
+  - method: GET
+    path: /posts/red-fox-behavior/evaluate/{wolf_image_id}
+    note: "Probe 3 — guard REJECTS with a category-mismatch reason"
+  - method: GET
+    path: /posts/coral-reef-bleaching/images
+    note: "Probe 4 — no confident match, with reasons"
+  - method: GET
+    path: /costs
+    note: "Probe 6 — every AI call attributed with a cost"
+
+eval:
+  command: node scripts/eval.js
+  metric: top-1 precision

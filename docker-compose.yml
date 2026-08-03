@@ -30,8 +30,15 @@ services:
       SIMILARITY_THRESHOLD: ${SIMILARITY_THRESHOLD:-0.62}
       LOW_CONFIDENCE_THRESHOLD: ${LOW_CONFIDENCE_THRESHOLD:-0.7}
       PORT: 3000
-    volumes:
+   volumes:
       - ./corpus:/app/corpus:ro
+      - ./server.js:/app/server.js:ro
+      - ./routes:/app/routes:ro
+      - ./services:/app/services:ro
+      - ./providers:/app/providers:ro
+      - ./schemas:/app/schemas:ro
+      - ./config:/app/config:ro
+      - ./db:/app/db:ro
     depends_on:
       db:
         condition: service_healthy
